@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fastcampus.ch6.dao.UserMapper">
+    <select id="select"  resultType="UserDto">
+        SELECT * FROM user_info
+    </select>
+
+    <delete id="deleteAll">
+        DELETE FROM user_info
+    </delete>
+
+    <insert id="insert" parameterType="UserDto">
+        INSERT INTO user_info
+        (id, pwd)
+        VALUES
+        (#{id}, #{pwd})
+    </insert>
+
+    <select id="getUserInfo" resultType="LoginDto" parameterType="LoginDto">
+        SELECT
+            ui.id AS id,
+            ui.pwd AS pwd
+        FROM
+            user_info ui
+        WHERE
+            ui.id = binary(#{id})
+          AND
+            ui.pwd = binary(#{pwd})
+    </select>
+</mapper>

@@ -10,6 +10,7 @@
             만약 별칭을 설정하지않으면 Mapper를 작성할때,
             매개변수가 예를 들어 BoardDto 면  "com.fastcampus.ch4.domain.BoardDto" 이렇게 전체 주소를 적어야한다.
         -->
-
+        <typeAlias alias="UserDto" type="com.fastcampus.ch6.domain.UserDto"/>
+        <typeAlias alias="LoginDto" type="com.fastcampus.ch6.domain.LoginDto"/>
     </typeAliases>
 </configuration>
