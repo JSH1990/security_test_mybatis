@@ -5,16 +5,37 @@
            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
            http://www.springframework.org/schema/security
            http://www.springframework.org/schema/security/spring-security.xsd">
-    <http auto-config='true'>
-        <intercept-url pattern="/**" access="hasRole('ROLE_USER')"  />
 
+    <http auto-config='true' use-expressions='true'>
+        <intercept-url pattern="/resources/**"	access="permitAll"/>
+        <intercept-url pattern="/login/**"      access="permitAll" />
+
+        <!-- 'ROLE_USER'인 사용자만 접근하게 설정 -->
+        <intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')" />
+        <form-login login-page="/login/loginPage.do"
+                    login-processing-url="/login.do"
+                    authentication-failure-url="/login/loginPage.do?err=true"
+
+                    default-target-url="/"
+                    username-parameter="userid"
+                    password-parameter="userpw" />
+
+        <session-management>
+            <concurrency-control max-sessions="1" expired-url="/" />
+        </session-management>
+
+        <!-- LoginController에서 받아서 accessDenied.jsp로 부른다 -->
         <access-denied-handler error-page="/login/accessDenied.do" />
+        <csrf disabled="true"/>
     </http>
+
     <authentication-manager>
         <authentication-provider>
             <user-service>
+                <!-- admin계정은 ROLE_USER, ROLE_ADMIN 인 사람만 접속할수있다. -->
                 <user name="admin" password="{noop}1234" authorities="ROLE_USER, ROLE_ADMIN" />
-                <user name="guest" password="{noop}1234" authorities="ROLE_ADMIN" />
+                <!-- 현재 hasRole이 'ROLE_ADMIN' 이므로 'ROLE_USER'는 접속이 거부된다. -->
+                <user name="guest" password="{noop}1234" authorities="ROLE_USER" />
             </user-service>
         </authentication-provider>
     </authentication-manager>
