@@ -1,15 +1,15 @@
-package com.fastcampus.ch6.login;
+package com.fastcampus.ch6.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.fastcampus.ch6.service.LoginService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class LoginController {
 
-    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
-
+    @Autowired
+    LoginService loginService;
 
     @RequestMapping(value="/login/loginPage.do")
     public String loginPage() {
@@ -20,5 +20,6 @@ public class LoginController {
     public String accessDeniedPage() throws Exception {
         return "/login/accessDenied";
     }
+
 
 }

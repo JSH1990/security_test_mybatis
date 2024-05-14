@@ -12,6 +12,8 @@
 
         <!-- 'ROLE_USER'인 사용자만 접근하게 설정 -->
         <intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/favicon.ico" access="hasRole('ROLE_ANONYMOUS')" />
+
         <form-login login-page="/login/loginPage.do"
                     login-processing-url="/login.do"
                     authentication-failure-url="/login/loginPage.do?err=true"
@@ -31,12 +33,23 @@
 
     <authentication-manager>
         <authentication-provider>
-            <user-service>
-                <!-- admin계정은 ROLE_USER, ROLE_ADMIN 인 사람만 접속할수있다. -->
-                <user name="admin" password="{noop}1234" authorities="ROLE_USER, ROLE_ADMIN" />
-                <!-- 현재 hasRole이 'ROLE_ADMIN' 이므로 'ROLE_USER'는 접속이 거부된다. -->
-                <user name="guest" password="{noop}1234" authorities="ROLE_USER" />
-            </user-service>
+<!--            <user-service>-->
+<!--                &lt;!&ndash; admin계정은 ROLE_USER, ROLE_ADMIN 인 사람만 접속할수있다. &ndash;&gt;-->
+<!--                <user name="admin" password="{noop}1234" authorities="ROLE_USER, ROLE_ADMIN" />-->
+<!--                &lt;!&ndash; 현재 hasRole이 'ROLE_ADMIN' 이므로 'ROLE_USER'는 접속이 거부된다. &ndash;&gt;-->
+<!--                <user name="guest" password="{noop}1234" authorities="ROLE_USER" />-->
+<!--            </user-service>-->
+            <jdbc-user-service data-source-ref="dataSource"
+                               users-by-username-query="SELECT USERID as username,
+            									PASSWORD,
+            									1 as enabled
+            							   FROM TEST_USER WHERE USERID=?"
+                               authorities-by-username-query="SELECT USERID as username,
+            										  CASE WHEN USERGRADE='01' THEN 'ROLE_ADMIN'
+            										       ELSE 'ROLE_USER'
+            										       END authority
+            								     FROM TEST_USER WHERE USERID=?"
+            />
         </authentication-provider>
     </authentication-manager>
 </beans:beans>

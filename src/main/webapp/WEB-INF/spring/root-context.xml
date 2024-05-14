@@ -18,6 +18,17 @@
         <property name="password" value="8786"></property>
     </bean>
 
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation"  value="classpath:mybatis-config.xml"/>
+<!--        <property name="mapperLocations" value="classpath:mapper/*Mapper.xml"/>-->
+        <property name="mapperLocations" value="classpath:/sqlmap/**/*.xml"></property>
+    </bean>
+
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>
+
     <tx:annotation-driven/>
     <context:component-scan base-package="com.fastcampus.ch6"/>
 </beans>
